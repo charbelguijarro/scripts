@@ -4,12 +4,18 @@ import sys
 def print_difference(account):
     valueF = account["F"]
     valueJ = account["J"]
+    total = valueF + valueJ
+
+    print("Dépense Florian : "+str(valueF)+"€")
+    print("Dépense Junyi : "+str(valueJ)+"€")
+    print("Dépense totale : "+str(total)+"€")
+    print("==========================")
 
     if valueF < valueJ:
-        diff = valueJ - valueF
+        diff = round((valueJ - valueF)/2, 2)
         print("Florian doit "+str(diff)+"€ à Junyi.")
     elif valueJ < valueF:
-        diff = valueF - valueJ
+        diff = round((valueF - valueJ)/2, 2)
         print("Junyi doit "+str(diff)+"€ à Florian.")
     else:
         print("Égalité.")
@@ -28,7 +34,7 @@ if __name__ == "__main__":
     for l in lines:
         expense = l.split()
         name = expense[0]
-        value = int(expense[1])
+        value = float(expense[1])
         account = add_expense(account, name, value)
     print_difference(account)
 
