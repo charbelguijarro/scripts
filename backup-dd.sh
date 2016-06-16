@@ -3,6 +3,7 @@
 backup_date=$(date +%Y%m%d)
 src_dirs=("/data" "/home/nairwolf")
 dest=/media/nairwolf/b770cf56-f1e0-45ce-a608-5f1a0a56cfeb/backup/
+exclude_args=--exclude='nairwolf/.cache/'
 
 if [ ! -d "$dest" ]
 then
@@ -24,7 +25,7 @@ do
 		exit 1
 	fi
 
-	rsync -a -v --delete --stats "$src" "$dest" > "$backup_report"
+	rsync -a -v --delete --stats "$exclude_args" "$src" "$dest" > "$backup_report"
 
 	if [ "$?" -eq 0 ]
 	then
