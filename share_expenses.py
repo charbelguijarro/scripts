@@ -30,11 +30,13 @@ def add_expense(account, name, value):
 
 if __name__ == "__main__":
     account = {"F":0, "J":0}
-    lines = sys.stdin.readlines()
-    for l in lines:
+
+    expense_file = open(sys.argv[1])
+    
+    for l in expense_file:
         expense = l.split()
         name = expense[0]
         value = float(expense[1])
         account = add_expense(account, name, value)
-    print_difference(account)
 
+    print_difference(account)
