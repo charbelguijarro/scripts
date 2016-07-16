@@ -34,6 +34,7 @@ def check_chinese_dict(d):
 def sanitize(line, exception):
     if line.startswith(exception) == False:
         line = '* ' + line
+    line = line.replace('(', '- ').replace(')', ' ').replace(':', '-')
     return line
 
 if __name__ == "__main__":
