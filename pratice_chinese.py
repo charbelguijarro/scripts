@@ -44,8 +44,7 @@ if __name__ == '__main__':
         print("****************************")
         print("Exercice n°", i+1)
         target, solution = pick_a_word(chinese_words)
-        print("Que veut-dire ce mot ? ", target)
-        s = input('Solution ?\n')
+        input("Que veut-dire ce mot ? '"+ target +"'\n")
     
         print("La solution est : ", solution)
 
