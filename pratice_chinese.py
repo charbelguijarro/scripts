@@ -14,7 +14,7 @@ def get_chinese_words(line):
 
 def pick_a_word(chinese_words):
     length = len(chinese_words)
-    word_index = random.randint(0, length)
+    word_index = random.randint(0, length-1)
     wtype = random.randint(0, 1)
     word = chinese_words[word_index]
 
