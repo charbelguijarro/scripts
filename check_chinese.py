@@ -4,13 +4,6 @@ import os
 
 def collect_words(line, chinese_dict, line_nb):
     for word in line.split():
-        # word can be '(wo3' or 'zou4)'
-        # remove uncessary parens
-        if word.startswith('('):
-            word = word[1:]
-        if word.endswith(')'):
-            word = word[:-1]
-
         if word[-1].isdigit():
             accent = word[-1]
             word = word[:-1] 
