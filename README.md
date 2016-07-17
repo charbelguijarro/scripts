@@ -14,8 +14,11 @@ signature.
 
 * [check_chinese.py](https://github.com/Nairwolf/scripts/blob/master/check_chinese.py) :
 As I'm learning chinese, this script reads this [file](https://gitlab.com/Nairwolf/Chinese/blob/master/voca_et_phrases.md) 
-and verify if it's well formated. It will be able to ask me some words to check if I know
-my vocabulary.
+and verify if it's well formated. 
+
+* [practice_chinese.py](https://github.com/Nairwolf/scripts/blob/master/pratice_chinese.py)
+It reads this [file](https://gitlab.com/Nairwolf/Chinese/blob/master/voca_et_phrases.md) 
+and asks me if I know my vocabulary
 
 * [share_expenses.py](https://github.com/Nairwolf/scripts/blob/master/share_expenses.py) :
 It reads a text file where it's written expenses of two people and compute money you need 
