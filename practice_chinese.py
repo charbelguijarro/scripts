@@ -36,25 +36,29 @@ if __name__ == '__main__':
             if word_list:
                 chinese_words.append(word_list)
 
-    nb = input("combien de fois veux-tu faire l'exercice ? ")
+    nb = input("How many times do you want to play ?\n")
     nb_success = 0
 
     for i in range(0, int(nb)):
         print("****************************")
-        print("Exercice n°", i+1)
-        target, solution = pick_a_word(chinese_words)
-        input("Que veut-dire ce mot ? '"+ target +"'\n")
+        print("Exercice n°{}".format(i+1))
 
-        print("La solution est : ", solution)
+        target, solution = pick_a_word(chinese_words)
+
+        input("What does this word mean '{}' ?\n".format(target))
+        print("The solution is '{}'".format(solution))
 
         while True:
-            rst = input("As-tu réussi ? o/n\n")
-            if rst in ('o', 'n'):
-                if rst == 'o':
+            rst = input("Is it correct ? (y/n) ")
+            if rst in ('y', 'n'):
+                if rst == 'y':
                     nb_success += 1
                 break
             else:
-                print("'{}' n'est pas une réponse valide".format(rst))
+                print("'{}' isn't a correct answer".format(rst))
                 continue
 
-        print("Nombre de succès : {}".format(nb_success))
+        percentage = round((nb_success / (i+1))*100)
+        print("****************************")
+        print("Good answers : {}/{}".format(nb_success, nb))
+        print("Success rate : {}%".format(percentage))
