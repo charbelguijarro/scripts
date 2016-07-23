@@ -16,6 +16,9 @@ signature.
 As I'm learning chinese, this script reads this [file](https://gitlab.com/Nairwolf/Chinese/blob/master/voca_et_phrases.md) 
 and verify if it's well formated. 
 
+* [irclog.sh](https://github.com/Nairwolf/scripts/blob/master/irclog.sh) : 
+Simple bash script to allow me fast access to my irc logs
+
 * [practice_chinese.py](https://github.com/Nairwolf/scripts/blob/master/practice_chinese.py) :
 It reads this [file](https://gitlab.com/Nairwolf/Chinese/blob/master/voca_et_phrases.md) 
 and asks me if I know my vocabulary.
