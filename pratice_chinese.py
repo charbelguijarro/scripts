@@ -13,12 +13,10 @@ def get_chinese_words(line):
     return word_list
 
 def pick_a_word(chinese_words):
-    length = len(chinese_words)
-    word_index = random.randint(0, length-1)
+    word = random.choice(chinese_words)
     wtype = random.randint(0, 1)
-    word = chinese_words[word_index]
 
-    # if wtype == 0
+    # We suppose wtype == 0
     target = " - ".join(word[:-1])
     solution = word[2]
 
