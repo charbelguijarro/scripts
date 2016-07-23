@@ -22,13 +22,13 @@ def pick_a_word(chinese_words):
 
     if wtype == 1:
         target, solution = solution, target
-    
+
     return target, solution
 
 if __name__ == '__main__':
     filename = sys.argv[1]
     chinese_words = []
-    
+
     with open(filename, 'r') as f:
         lines = f.read().splitlines()
         for line in lines:
@@ -37,13 +37,24 @@ if __name__ == '__main__':
                 chinese_words.append(word_list)
 
     nb = input("combien de fois veux-tu faire l'exercice ? ")
+    nb_success = 0
 
     for i in range(0, int(nb)):
         print("****************************")
         print("Exercice n°", i+1)
         target, solution = pick_a_word(chinese_words)
         input("Que veut-dire ce mot ? '"+ target +"'\n")
-    
+
         print("La solution est : ", solution)
 
-        input("J'espère que tu as réussi ! Presse 'entrez' pour passer à la suite ")
+        while True:
+            rst = input("As-tu réussi ? o/n\n")
+            if rst in ('o', 'n'):
+                if rst == 'o':
+                    nb_success += 1
+                break
+            else:
+                print("'{}' n'est pas une réponse valide".format(rst))
+                continue
+
+        print("Nombre de succès : {}".format(nb_success))
