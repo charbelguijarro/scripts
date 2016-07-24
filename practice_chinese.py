@@ -66,10 +66,12 @@ if __name__ == '__main__':
             nb = int(nb)
         except ValueError:
             print("Enter a positive value !")
+            continue
         if nb >= 0:
             break
         else:
             print("Enter a positive value !")
+            continue
         
 
     nb_success = 0
