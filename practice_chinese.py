@@ -17,7 +17,7 @@ def pick_a_word(chinese_words):
     wtype = random.randint(0, 1)
 
     # We suppose wtype == 0
-    target = " - ".join(word[:-1])
+    target = "{} ({})".format(word[0], word[1])
     solution = word[2]
 
     if wtype == 1:
@@ -26,10 +26,10 @@ def pick_a_word(chinese_words):
     return target, solution
 
 def create_line_word(target, solution):
-    if "-" in solution:
+    if "(" in solution:
         target, solution = solution, target
 
-    target = target.replace('-', ':')
+    target = target.replace('(', ': ').replace(')', '')
     wordline = "* "+target+" : "+solution
 
     return wordline
@@ -61,8 +61,8 @@ if __name__ == '__main__':
 
         target, solution = pick_a_word(chinese_words)
 
-        input("What does this word mean '{}' ?\n".format(target))
-        print("The solution is '{}'".format(solution))
+        input('What does this word mean "{}" ?\n'.format(target))
+        print('The solution is "{}"'.format(solution))
 
         while True:
             rst = input("Is it correct ? (y/n) ")
