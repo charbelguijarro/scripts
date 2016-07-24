@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
+import sys, os
 import random
 
 def get_chinese_words(line):
@@ -39,9 +39,17 @@ def write_errors_file(failed_words):
         for wordline in failed_words:
             f.write(wordline+'\n')
 
-
 if __name__ == '__main__':
-    filename = sys.argv[1]
+    try:
+        filename = sys.argv[1]
+    except IndexError:
+        print("Enter filename as argument")
+        quit()
+
+    if not os.path.exists(filename):
+        print("Enter existing filename")
+        quit()
+
     chinese_words = []
     failed_words = []
 
