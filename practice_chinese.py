@@ -25,9 +25,25 @@ def pick_a_word(chinese_words):
 
     return target, solution
 
+def create_line_word(target, solution):
+    if "-" in solution:
+        target, solution = solution, target
+
+    target = target.replace('-', ':')
+    wordline = "* "+target+" : "+solution
+
+    return wordline
+
+def write_errors_file(failed_words):
+    with open('errors.md', 'a') as f:
+        for wordline in failed_words:
+            f.write(wordline+'\n')
+
+
 if __name__ == '__main__':
     filename = sys.argv[1]
     chinese_words = []
+    failed_words = []
 
     with open(filename, 'r') as f:
         lines = f.read().splitlines()
@@ -53,6 +69,9 @@ if __name__ == '__main__':
             if rst in ('y', 'n'):
                 if rst == 'y':
                     nb_success += 1
+                else:
+                    words = create_line_word(target, solution)
+                    failed_words.append(words)
                 break
             else:
                 print("'{}' isn't a correct answer".format(rst))
@@ -62,3 +81,6 @@ if __name__ == '__main__':
         print("****************************")
         print("Good answers : {}/{}".format(nb_success, nb))
         print("Success rate : {}%".format(percentage))
+        
+    if filename != 'errors.md':
+        write_errors_file(failed_words)
