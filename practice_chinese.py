@@ -52,7 +52,18 @@ if __name__ == '__main__':
             if word_list:
                 chinese_words.append(word_list)
 
-    nb = input("How many times do you want to play ?\n")
+    while True:
+        nb = input("How many times do you want to play ?\n")
+        try:
+            nb = int(nb)
+        except ValueError:
+            print("Enter a positive value !")
+        if nb >= 0:
+            break
+        else:
+            print("Enter a positive value !")
+        
+
     nb_success = 0
 
     for i in range(0, int(nb)):
