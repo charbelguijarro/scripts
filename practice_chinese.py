@@ -40,15 +40,15 @@ def write_errors_file(failed_words):
             f.write(wordline+'\n')
 
 if __name__ == '__main__':
-    try:
+    if len(sys.argv) == 2:
         filename = sys.argv[1]
-    except IndexError:
+    else:
         print("Enter filename as argument")
-        quit()
+        exit()
 
     if not os.path.exists(filename):
         print("Enter existing filename")
-        quit()
+        exit()
 
     chinese_words = []
     failed_words = []
