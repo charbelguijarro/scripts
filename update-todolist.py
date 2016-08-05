@@ -34,7 +34,10 @@ if __name__ == '__main__':
     with open(args.todolist, 'r') as f:
         lines = f.readlines()
 
-    lines[1] = get_week_line() + lines[1]
+    new_week = get_week_line()
+    if lines[1].rstrip() != new_week.rstrip():
+        lines[0] += new_week
+        #lines[1] = new_week + lines[1]
 
     with open(args.todolist, 'w') as f:
         f.write(''.join(lines))
