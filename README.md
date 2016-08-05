@@ -26,3 +26,7 @@ and asks me if I know my vocabulary.
 * [share_expenses.py](https://github.com/Nairwolf/scripts/blob/master/share_expenses.py) :
 It reads a text file where it's written expenses of two people and compute money you need 
 to give to refund your partner.
+
+* [update-todolist.py](https://github.com/Nairwolf/scripts/blob/master/update-todolist.py) :
+It reads my personal todolist as argument, add a new paragraph (current week), and track
+tasks done
