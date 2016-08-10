@@ -27,13 +27,19 @@ TODOLIST = 'todolist.md'
 README = 'README.md'
 
 def iso_to_gregorian(iso_year, iso_week, iso_day):
-        jan4 = datetime.date(iso_year, 1, 4)
-        start = jan4 - datetime.timedelta(days=jan4.isoweekday()-1)
-        return start + datetime.timedelta(weeks=iso_week-1, days=iso_day-1)
+    """
+        As 4th January is always in the first week on the current year, this day is used
+        to determine a date from its week number, the year, and the day (monday..sunday)
+        For example, iso_to_gregorian(2016, 21, 1) returns datetime.date(2016, 5, 23)
+    """
+    jan4 = datetime.date(iso_year, 1, 4)
+    start = jan4 - datetime.timedelta(days=jan4.isoweekday()-1)
+    return start + datetime.timedelta(weeks=iso_week-1, days=iso_day-1)
 
 def get_week(week_number=None):
     """
-        Get today date and returns information to construct week line and week summary
+        Get week_number and returns information to construct week line and week summary
+        If week_number is None, it uses the actual week number
         Returns:
             week_number: Current week number -> int
             start_month : -> str
@@ -57,7 +63,7 @@ def get_week(week_number=None):
 
 def format_number(number):
     """
-        Takes an integer, and add '0' if there is only one digit. 
+        Takes an integer, and add '0' if there is only one digit 
         Input : 8 -> int
         Output : '08' -> str
     """
@@ -69,7 +75,9 @@ def format_number(number):
 def get_week_line(week_number=None):
     """
         Return this line
-        ## Week week_number - 09/08 -> 15/08\n\n
+        ## Week week_number - 09/08 -> 15/08\n
+
+        if week_number is None, it uses the actual week_number
     """
     week_nb, s_month, s_day, e_month, e_day = get_week(week_number)
 
@@ -83,8 +91,10 @@ def get_week_line(week_number=None):
 def get_week_summary(percentage, week_number=None):
     """
         Return this line : 
-        * [Week 31](https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md#
-            week-31-0908-1508) : 25%\n
+        * [Week week_number](https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md#
+            week-31-0908-1508) : percentage%\n
+
+        If week_number is None, it uses the actual week_number
     """
     week_nb, s_month, s_day, e_month, e_day = get_week(week_number)
 
@@ -102,7 +112,7 @@ def parse_todolist(lines):
     """
         Parse list of lines of the todolist.md file. 
         Return a dictionnary with 'week_number' as key, 
-        and percentage of tasks_done as value.
+        and percentage of tasks done as value.
     """
     regex = re.compile(r'Week (\d\d?)')
     dtasks = {}
@@ -138,8 +148,10 @@ def parse_todolist(lines):
 
 def update_todolist():
     """
-        Open and read todolist.md and update it. This function add a new line for 
-        the current week. It returns a dict TODO 
+        Open and read 'todolist.md', parse its lines, verify its information and update 
+        it. If the current week is not present, this function will be add it.
+
+        Return a dict with week_number as key and percentage_tasks_done as value
     """
     with open(TODOLIST, 'r') as f:
         lines = f.readlines()
@@ -157,8 +169,8 @@ def update_todolist():
 
 def update_readme(percentages):
     """
-        Open and read README.md and update it. This function add a new line for the 
-        current week.
+        This function write README.md from scratch as percentage of 
+        tasks done by weeks is known. 
     """
     od = OrderedDict(reversed(sorted(percentages.items())))
 
@@ -168,7 +180,7 @@ def update_readme(percentages):
         line = get_week_summary(percentage, week)
         lines.append(line)
 
-    actual_week = get_week_summary(percentage)
+    actual_week = get_week_summary(0)
     if lines[2].rstrip() != actual_week.rstrip():
         lines[1] += actual_week
 
