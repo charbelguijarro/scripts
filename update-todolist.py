@@ -98,18 +98,6 @@ def get_week_summary(week_number, percentage):
     week_summary += " : {}%\n".format(percentage)
     return week_summary
 
-def parse_readme(lines, dtasks):
-    regex = re.compile(r'* [Week (\d\d?)]')
-    
-    for l in lines:
-        mo = regex.search(l)
-        if mo:
-            week_number = int(mo.group(1))
-            percentage = dtasks[week_number]
-            new_line = get_week_summary(week_number, percentage)
-
-
-
 def parse_todolist(lines):
     """
         Parse list of lines of the todolist.md file. 
