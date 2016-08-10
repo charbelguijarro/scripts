@@ -158,7 +158,9 @@ def update_todolist():
     dtasks, new_lines = parse_todolist(lines)
 
     new_week = get_week_line()
-    print(new_week)
+    if new_lines[1].rstrip() != new_week.rstrip():
+        print("new line added")
+        new_lines[0] += new_week+'\n'
     
     with open(TODOLIST, 'w') as f:
         f.write(''.join(new_lines))
