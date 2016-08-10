@@ -80,7 +80,7 @@ def get_week_line(week_number=None):
                                                     e_month)
     return line
 
-def get_week_summary(week_number, percentage):
+def get_week_summary(percentage, week_number=None):
     """
         Return this line : 
         * [Week 31](https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md#
@@ -165,8 +165,12 @@ def update_readme(percentages):
     lines = ['# To do list\n\n', '## Weeks\n\n']
 
     for week, percentage in od.items():
-        line = get_week_summary(week, percentage)
+        line = get_week_summary(percentage, week)
         lines.append(line)
+
+    actual_week = get_week_summary(percentage)
+    if lines[2].rstrip() != actual_week.rstrip():
+        lines[1] += actual_week
 
     with open(README, 'w') as f:
         f.write(''.join(lines))
