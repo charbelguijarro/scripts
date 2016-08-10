@@ -4,6 +4,7 @@ import argparse
 import os
 import re
 import datetime
+from collections import OrderedDict
 
 """
     todo-update
@@ -159,7 +160,6 @@ def update_todolist():
 
     new_week = get_week_line()
     if new_lines[1].rstrip() != new_week.rstrip():
-        print("new line added")
         new_lines[0] += new_week+'\n'
     
     with open(TODOLIST, 'w') as f:
@@ -167,17 +167,18 @@ def update_todolist():
 
     return dtasks
 
-def update_readme(percentage):
+def update_readme(percentages):
     """
         Open and read README.md and update it. This function add a new line for the 
         current week.
     """
-    with open(README, 'r') as f:
-        lines = f.readlines()
+    od = OrderedDict(reversed(sorted(percentages.items())))
 
-    week_summary = get_week_summary(percentage)
-    if lines[4].rstrip() != week_summary.rstrip():
-        lines[3] += week_summary
+    lines = ['# To do list\n\n', '## Weeks\n\n']
+
+    for week, percentage in od.items():
+        line = get_week_summary(week, percentage)
+        lines.append(line)
 
     with open(README, 'w') as f:
         f.write(''.join(lines))
@@ -197,5 +198,5 @@ def check_input():
 
 if __name__ == '__main__':
     check_input()
-    percentage = update_todolist()
-    update_readme(percentage)
+    percentages = update_todolist()
+    update_readme(percentages)
