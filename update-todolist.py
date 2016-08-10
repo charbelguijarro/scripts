@@ -3,7 +3,7 @@
 import argparse
 import os
 import re
-from datetime import date, timedelta
+import datetime
 
 """
     todo-update
@@ -25,7 +25,12 @@ from datetime import date, timedelta
 TODOLIST = 'todolist.md'
 README = 'README.md'
 
-def get_week():
+def iso_to_gregorian(iso_year, iso_week, iso_day):
+        jan4 = datetime.date(iso_year, 1, 4)
+        start = jan4 - datetime.timedelta(days=jan4.isoweekday()-1)
+        return start + datetime.timedelta(weeks=iso_week-1, days=iso_day-1)
+
+def get_week(week_number=None):
     """
         Get today date and returns information to construct week line and week summary
         Returns:
@@ -35,10 +40,12 @@ def get_week():
             end_month : -> str
             end_day : -> str
     """
-    today = date.today()
-    week_number = today.isocalendar()[1]
-    start_week = today - timedelta(days=today.day - 1)
-    end_week = start_week + timedelta(days=6)
+    today = datetime.date.today()
+    year = today.year
+    if week_number == None:
+        week_number = today.isocalendar()[1]
+    start_week = iso_to_gregorian(year, week_number, 1)
+    end_week = iso_to_gregorian(year, week_number, 7)
 
     start_month = format_number(start_week.month)
     start_day = format_number(start_week.day)
@@ -58,27 +65,27 @@ def format_number(number):
         nb = '0'+nb
     return nb
 
-def get_week_line():
+def get_week_line(week_number=None):
     """
         Return this line
         ## Week week_number - 09/08 -> 15/08\n\n
     """
-    week_nb, s_month, s_day, e_month, e_day = get_week()
+    week_nb, s_month, s_day, e_month, e_day = get_week(week_number)
 
-    line_to_print = "## Week {} - {}/{} -> {}/{}\n\n".format(week_nb, 
-                                                            s_day, 
-                                                            s_month,
-                                                            e_day,
-                                                            e_month)
-    return line_to_print
+    line = "## Week {} - {}/{} -> {}/{}\n".format(week_nb, 
+                                                    s_day, 
+                                                    s_month,
+                                                    e_day,
+                                                    e_month)
+    return line
 
-def get_week_summary(percentage):
+def get_week_summary(week_number, percentage):
     """
         Return this line : 
         * [Week 31](https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md#
             week-31-0908-1508) : 25%\n
     """
-    week_nb, s_month, s_day, e_month, e_day = get_week()
+    week_nb, s_month, s_day, e_month, e_day = get_week(week_number)
 
     url = "https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md"
     week_summary = "* [Week {}](".format(week_nb)
@@ -90,6 +97,18 @@ def get_week_summary(percentage):
     week_summary += " : {}%\n".format(percentage)
     return week_summary
 
+def parse_readme(lines, dtasks):
+    regex = re.compile(r'* [Week (\d\d?)]')
+    
+    for l in lines:
+        mo = regex.search(l)
+        if mo:
+            week_number = int(mo.group(1))
+            percentage = dtasks[week_number]
+            new_line = get_week_summary(week_number, percentage)
+
+
+
 def parse_todolist(lines):
     """
         Parse list of lines of the todolist.md file. 
@@ -98,14 +117,21 @@ def parse_todolist(lines):
     """
     regex = re.compile(r'Week (\d\d?)')
     dtasks = {}
+    new_lines = []
     
     for l in lines:
+        new_l = l
         if l.startswith('##'):
             mo = regex.search(l)
-            week_number = mo.group(1)
+            week_number = int(mo.group(1))
             dtasks[week_number] = 0
             nb_tasks = 0
             tasks_done = 0
+
+            # Verify current week_line and correct it
+            new_line = get_week_line(week_number)
+            if l.rstrip() != new_line.rstrip():
+                new_l = new_line
 
         if l.startswith('*'):
             nb_tasks += 1
@@ -117,7 +143,9 @@ def parse_todolist(lines):
                 percentage = 0
             dtasks[week_number] = percentage
 
-    return dtasks
+        new_lines.append(new_l)
+
+    return dtasks, new_lines
 
 def update_todolist():
     """
@@ -127,15 +155,13 @@ def update_todolist():
     with open(TODOLIST, 'r') as f:
         lines = f.readlines()
 
-    dtasks = parse_todolist(lines)
-    print(dtasks)
-    
-    new_week = get_week_line()
-    if lines[1].rstrip() != new_week.rstrip():
-        lines[0] += new_week
+    dtasks, new_lines = parse_todolist(lines)
 
+    new_week = get_week_line()
+    print(new_week)
+    
     with open(TODOLIST, 'w') as f:
-        f.write(''.join(lines))
+        f.write(''.join(new_lines))
 
     return dtasks
 
