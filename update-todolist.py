@@ -146,6 +146,40 @@ def parse_todolist(lines):
 
     return dtasks, new_lines
 
+def count_finished_tasks():
+    """
+        Read todolist.md and counts finished tasks.
+        Return a dictionnary with 'week_number' as key, 
+        and percentage of tasks done as value.
+    """
+    with open(TODOLIST, 'r') as f:
+        lines = f.readlines()
+
+    regex = re.compile(r'Week (\d\d?)')
+    dpercents = {}
+    
+    for l in lines:
+        if l.startswith('##'):
+            mo = regex.search(l)
+            week_number = int(mo.group(1))
+            dpercents[week_number] = 0
+            nb_tasks = 0
+            tasks_done = 0
+
+        if l.startswith('*'):
+            nb_tasks += 1
+
+            if l.rfind('DONE') != -1:
+                tasks_done += 1
+            try:
+                percentage = round( (tasks_done / nb_tasks) * 100 )
+            except ZeroDivisionError:
+                percentage = 0
+
+            dpercents[week_number] = percentage
+
+    return dpercents
+
 def update_todolist():
     """
         Open and read 'todolist.md', parse its lines, verify its information and update 
@@ -239,5 +273,5 @@ def check_input():
 if __name__ == '__main__':
     check_input()
     verify_content()
-    percentages = update_todolist()
+    percentages = count_finished_tasks()
     update_readme(percentages)
