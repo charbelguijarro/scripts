@@ -213,6 +213,12 @@ def verify_content():
 
         corrected_lines.append(new_line)
 
+    # Verification of the current week and add it if it isn't present
+    actual_week = get_week_line()
+    if corrected_lines[1].rstrip() != actual_week.rstrip():
+        corrected_lines[0] += actual_week+'\n'
+        need_rewrite = True
+
     if need_rewrite:
         with open(TODOLIST, 'w') as f:
             f.write(''.join(corrected_lines))
