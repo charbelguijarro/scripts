@@ -196,16 +196,15 @@ def verify_content():
 
 def check_input():
     """
-        Verify existence of 'todolist.md' and 'README.md'. The program will stop if 
-        these files are not present
+        Verify existence of 'todolist.md'. The program will stop if these file is
+        not present. It will create a file called 'README.md' if it doesn't exist
     """
     if not os.path.isfile(TODOLIST):
         print("Error: '{}' is not found".format(TODOLIST))
         quit()
 
-    if not os.path.isfile(README):
-        print("Error: '{}' is not found".format(README))
-        quit()
+    with open(README, 'a'):
+        pass
 
 if __name__ == '__main__':
     check_input()
