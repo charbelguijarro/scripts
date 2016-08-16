@@ -108,44 +108,6 @@ def get_week_summary(percentage, week_number=None):
     week_summary += " : {}%\n".format(percentage)
     return week_summary
 
-def parse_todolist(lines):
-    """
-        Parse list of lines of the todolist.md file. 
-        Return a dictionnary with 'week_number' as key, 
-        and percentage of tasks done as value.
-    """
-    regex = re.compile(r'Week (\d\d?)')
-    dtasks = {}
-    new_lines = []
-    
-    for l in lines:
-        new_l = l
-        if l.startswith('##'):
-            mo = regex.search(l)
-            week_number = int(mo.group(1))
-            dtasks[week_number] = 0
-            nb_tasks = 0
-            tasks_done = 0
-
-            # Verify current week_line and correct it
-            new_line = get_week_line(week_number)
-            if l.rstrip() != new_line.rstrip():
-                new_l = new_line
-
-        if l.startswith('*'):
-            nb_tasks += 1
-            if l.rfind('DONE') != -1:
-                tasks_done += 1
-            try:
-                percentage = round( (tasks_done / nb_tasks) * 100 )
-            except ZeroDivisionError:
-                percentage = 0
-            dtasks[week_number] = percentage
-
-        new_lines.append(new_l)
-
-    return dtasks, new_lines
-
 def count_finished_tasks():
     """
         Read todolist.md and counts finished tasks.
@@ -179,47 +141,6 @@ def count_finished_tasks():
             dpercents[week_number] = percentage
 
     return dpercents
-
-def update_todolist():
-    """
-        Open and read 'todolist.md', parse its lines, verify its information and update 
-        it. If the current week is not present, this function will be add it.
-
-        Return a dict with week_number as key and percentage_tasks_done as value
-    """
-    with open(TODOLIST, 'r') as f:
-        lines = f.readlines()
-
-    dtasks, new_lines = parse_todolist(lines)
-
-    new_week = get_week_line()
-    if new_lines[1].rstrip() != new_week.rstrip():
-        new_lines[0] += new_week+'\n'
-    
-    with open(TODOLIST, 'w') as f:
-        f.write(''.join(new_lines))
-
-    return dtasks
-
-def update_readme(percentages):
-    """
-        This function write README.md from scratch as percentage of 
-        tasks done by weeks is known. 
-    """
-    od = OrderedDict(reversed(sorted(percentages.items())))
-
-    lines = ['# To do list\n\n', '## Weeks\n\n']
-
-    for week, percentage in od.items():
-        line = get_week_summary(percentage, week)
-        lines.append(line)
-
-    actual_week = get_week_summary(0)
-    if lines[2].rstrip() != actual_week.rstrip():
-        lines[1] += actual_week
-
-    with open(README, 'w') as f:
-        f.write(''.join(lines))
 
 def write_readme(percentages):
     """
