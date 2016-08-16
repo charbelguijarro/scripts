@@ -221,6 +221,22 @@ def update_readme(percentages):
     with open(README, 'w') as f:
         f.write(''.join(lines))
 
+def write_readme(percentages):
+    """
+        This function write README.md from scratch as percentage of 
+        tasks done by weeks is known. 
+    """
+    od = OrderedDict(reversed(sorted(percentages.items())))
+
+    lines = ['# To do list\n\n', '## Weeks\n\n']
+
+    for week, percentage in od.items():
+        line = get_week_summary(percentage, week)
+        lines.append(line)
+
+    with open(README, 'w') as f:
+        f.write(''.join(lines))
+
 def verify_content():
     """
         Reads todolist.md and verifies if dates are correctly written and correct 
@@ -274,4 +290,4 @@ if __name__ == '__main__':
     check_input()
     verify_content()
     percentages = count_finished_tasks()
-    update_readme(percentages)
+    write_readme(percentages)
