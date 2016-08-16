@@ -187,6 +187,36 @@ def update_readme(percentages):
     with open(README, 'w') as f:
         f.write(''.join(lines))
 
+def verify_content():
+    """
+        Reads todolist.md and verifies if dates are correctly written and correct 
+        them if it's not the case.
+    """
+    with open(TODOLIST, 'r') as f:
+        lines = f.readlines()
+
+    regex = re.compile(r'Week (\d\d?)')
+    corrected_lines = []
+    need_rewrite = False
+
+    for l in lines:
+        new_line = l
+        if l.startswith('##'):
+            mo = regex.search(l)
+            week_number = int(mo.group(1))
+
+            # Verify current week_line and correct it
+            line_ref = get_week_line(week_number)
+            if l.rstrip() != line_ref.rstrip():
+                new_line = line_ref
+                need_rewrite = True
+
+        corrected_lines.append(new_line)
+
+    if need_rewrite:
+        with open(TODOLIST, 'w') as f:
+            f.write(''.join(corrected_lines))
+
 def check_input():
     """
         Verify existence of 'todolist.md' and 'README.md'. The program will stop if 
@@ -202,5 +232,6 @@ def check_input():
 
 if __name__ == '__main__':
     check_input()
+    verify_content()
     percentages = update_todolist()
     update_readme(percentages)
