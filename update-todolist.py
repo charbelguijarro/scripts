@@ -25,6 +25,7 @@ from collections import OrderedDict
 
 TODOLIST = 'todolist.md'
 README = 'README.md'
+URL = "https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md"
 
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     """
@@ -96,10 +97,9 @@ def get_week_summary(percentage, week_number=None):
     """
     week_nb, s_month, s_day, e_month, e_day = get_week(week_number)
 
-    url = "https://gitlab.com/Nairwolf/ToDoList/blob/master/todolist.md"
     week_summary = "* [Week {}](".format(week_nb)
     
-    week_summary += url+"#week-{}-{}{}-{}{})".format(week_nb, 
+    week_summary += URL+"#week-{}-{}{}-{}{})".format(week_nb, 
                                                     s_day, s_month,
                                                     e_day, e_month)
 
