@@ -68,9 +68,7 @@ def format_number(number):
         Output : '08' -> str
     """
     nb = str(number)
-    if len(nb) == 1:
-        nb = '0'+nb
-    return nb
+    return '0'+nb if len(nb) == 1 else nb
 
 def get_week_line(week_number=None):
     """
