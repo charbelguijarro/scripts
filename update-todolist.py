@@ -199,13 +199,16 @@ def check_input():
     """
     if not os.path.isfile(TODOLIST):
         print("Error: '{}' is not found".format(TODOLIST))
-        quit()
+        return False
 
     with open(README, 'a'):
         pass
 
+    return True
+
 if __name__ == '__main__':
-    check_input()
-    verify_content()
-    percentages = count_finished_tasks()
-    write_readme(percentages)
+    ok = check_input()
+    if ok:
+        verify_content()
+        percentages = count_finished_tasks()
+        write_readme(percentages)
