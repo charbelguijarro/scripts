@@ -19,9 +19,9 @@ def get_content(filepath):
 
 def add_current_day(content):
     today = date.today()
-    weekday = DAYS[today.isoweekday()]
+    weekday = DAYS[today.isoweekday() - 1]
     daynumber = today.day
-    month = MONTHS[today.month]
+    month = MONTHS[today.month - 1]
 
     datestring = '# {} {} {}\n\n'.format(weekday, daynumber, month)
 
