@@ -20,11 +20,12 @@ def get_upstream_update(text):
     for line in text.splitlines():
         line = line.strip()
         version = pattern_version.findall(line)
-        if version[0] != version[1]:
-            package_name = pattern_package_name.findall(line)[0]
-            print("'{}' has an upstream update: {} -> {}".format(package_name, 
-                                                                    version[1],
-                                                                    version[0]))
+        if len(version) == 2:
+            if version[0] != version[1]:
+                package_name = pattern_package_name.findall(line)[0]
+                print("'{}' has an upstream update: {} -> {}".format(package_name, 
+                                                                     version[1],
+                                                                     version[0]))
 if __name__ == '__main__':
     text = sys.stdin.read()
     get_upstream_update(text)
