@@ -47,5 +47,5 @@ def counter():
 
 if __name__ == '__main__':
     age = counter()
-    print(age)
+    print("You have {} years old!".format(age))
 
