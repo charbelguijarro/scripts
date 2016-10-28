@@ -10,7 +10,7 @@ sudo cp share_expenses.py ${target}share_expenses
 sudo cp update-todolist.py ${target}update-todolist
 sudo cp update_journal.py ${target}update_journal
 sudo cp get_upstream_update.py ${target}get_upstream_update
-sudo cp counter++.py ${target}counter++
+sudo cp age_counter.py ${target}age_counter
 
 sudo chmod 755 ${target}*
 
