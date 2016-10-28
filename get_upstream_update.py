@@ -23,12 +23,13 @@ def get_upstream_update(text):
         line = line.strip()
         versions = pattern_version.findall(line)
         # versions = [('5.8', ''), ('1.0.0', '.0'), ('5.7.15', '.15')]
-        new = versions[0][0]
-        old = versions[-1][0]
-        if new != old:
-            package_name = pattern_package_name.findall(line)[0]
-            print("'{}' has an upstream update: {} -> {}".format(package_name, 
-                                                                     old, new))
+        if versions:
+            new = versions[0][0]
+            old = versions[-1][0]
+            if new != old:
+                package_name = pattern_package_name.findall(line)[0]
+                print("'{}' has an upstream update: {} -> {}".format(package_name, 
+                                                                      old, new))
 if __name__ == '__main__':
     text = sys.stdin.read()
     get_upstream_update(text)
