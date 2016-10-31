@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import date
+import age_counter
 
 JOURNAL = '/home/nairwolf/Documents/misc/diary/journal.md'
 DAYS = ('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche')
@@ -18,12 +19,15 @@ def get_content(filepath):
     return content
 
 def update_text(content):
-    datestring = get_actual_date()
+    actual_date = get_actual_date()
     first_line = content.splitlines()[0]
+    date_on_file = first_line.split('-')[0]
     
-    if datestring != first_line: 
-        print('diff')
-        content = datestring + '\n\n' + content
+    if actual_date != date_on_file: 
+        age = str(age_counter.counter())
+        content = actual_date + ' - ' + age + '\n\n' + content
+
+    
 
     return content
 
