@@ -21,13 +21,11 @@ def get_content(filepath):
 def update_text(content):
     actual_date = get_actual_date()
     first_line = content.splitlines()[0]
-    date_on_file = first_line.split('-')[0]
+    date_on_file = first_line.split(' - ')[0]
     
-    if actual_date != date_on_file: 
+    if actual_date != date_on_file: # dates are different 
         age = str(age_counter.counter())
         content = actual_date + ' - ' + age + '\n\n' + content
-
-    
 
     return content
 
