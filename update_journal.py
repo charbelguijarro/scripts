@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import date
+import datetime as dt
 import age_counter
 
 JOURNAL = '/home/nairwolf/Documents/misc/diary/journal.md'
@@ -11,7 +12,29 @@ MONTHS = ('Janvier', 'F√©vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao√
 def main():
     content = get_content(JOURNAL)
     content = update_text(content)
+    content = verify_timestamp(content)
     write_content(JOURNAL, content)
+
+def verify_timestamp(content):
+    for line in content.splitlines():
+        if line and line[0] == '#':
+            line_split = line.split(' - ')
+            if len(line_split) == 1:
+                date = convert_string_date(line)
+    return content
+
+def convert_string_date(date):
+    """
+        date is '# Vendredi 1 Janvier', converts this string into 
+        '01/01/2016 - 12h00'
+    """
+    date_list = date.split()
+    day = date_list[2]
+    month = date_list[3]
+
+    format_date = "{}/{}/2016 - 12h00".format(day, month)
+    return format_date
+
 
 def get_content(filepath):
     with open(filepath, 'r') as f:
@@ -30,7 +53,7 @@ def update_text(content):
     return content
 
 def get_actual_date():
-    today = date.today()
+    today = dt.date.today()
     weekday = DAYS[today.isoweekday() - 1]
     daynumber = today.day
     month = MONTHS[today.month - 1]
