@@ -13,8 +13,7 @@ def get_upstream_update(text):
         mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
         xfce4-terminal/zesty 0.8.1-1 amd64 [upgradable from: 0.6.3-2ubuntu1]
     update:
-        'vim' has an upstream update: 7.4.1829 -> 7.5.1829
-        'mysql-common' has an upstream update: 5.7.15 -> 5.8
+        'xfce4-terminal' : 0.6.3 -> 0.8.1
     """    
 
     text = text.strip()
@@ -35,11 +34,16 @@ def get_upstream_update(text):
                 print("'{}' : {} -> {}".format(package_name, 
                                                                       old, new))
 if __name__ == '__main__':
-    text = sys.stdin.read()
-    text_test = """
-        vim/zesty 2:7.5.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
-        mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
-        python3.5/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
-        python3.5-dev/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
-    """
-    get_upstream_update(text)
+    try:
+        sys.argv[1] == 'DEBUG'
+        text = """
+            vim/zesty 2:7.5.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
+            mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
+            python3.5/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
+            python3.5-dev/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
+            """
+    except:
+        text = sys.stdin.read()
+    finally:
+        get_upstream_update(text)
+
