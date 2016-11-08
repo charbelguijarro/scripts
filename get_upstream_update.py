@@ -10,26 +10,36 @@ def get_upstream_update(text):
     text: 
         vim/zesty 2:7.5.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
         vim-common/zesty 2:7.4.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
-        mysql-common/zesty,zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
+        mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
+        xfce4-terminal/zesty 0.8.1-1 amd64 [upgradable from: 0.6.3-2ubuntu1]
     update:
         'vim' has an upstream update: 7.4.1829 -> 7.5.1829
         'mysql-common' has an upstream update: 5.7.15 -> 5.8
     """    
 
     text = text.strip()
-    pattern_version = re.compile(r'(\d+\.\d+(\.\d+)?)')
-    pattern_package_name = re.compile(r'(.*)/')
+    pattern = (r'(.+)/\w+ (\d+\.\d+(?:\.\d+)?).* (?:amd64|i386) \[upgradable from: '
+               r'(\d+\.\d+(?:\.\d+)?).*')
+    pattern_version = re.compile(pattern)
+
     for line in text.splitlines():
         line = line.strip()
-        versions = pattern_version.findall(line)
-        # versions = [('5.8', ''), ('1.0.0', '.0'), ('5.7.15', '.15')]
-        if versions:
-            new = versions[0][0]
-            old = versions[-1][0]
+        groups = pattern_version.findall(line)
+        # groups = [('xfce4-terminal', '0.8.1', '0.6.3')]
+        if groups and len(groups[0]) == 3:
+            rst = groups[0]
+            package_name = rst[0]
+            new = rst[1]
+            old = rst[2]
             if new != old:
-                package_name = pattern_package_name.findall(line)[0]
-                print("'{}' has an upstream update: {} -> {}".format(package_name, 
+                print("'{}' : {} -> {}".format(package_name, 
                                                                       old, new))
 if __name__ == '__main__':
     text = sys.stdin.read()
+    text_test = """
+        vim/zesty 2:7.5.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
+        mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
+        python3.5/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
+        python3.5-dev/zesty 3.5.2-7 amd64 [upgradable from: 3.5.2-6]
+    """
     get_upstream_update(text)
