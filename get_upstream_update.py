@@ -13,31 +13,33 @@ def _cmp(expected, result):
     else:
         print("FAIL")
         minlen = min(len(result), len(expected))
+        print("EXPECTED:\n{}".format(expected))
+        print("GOT:\n{}".format(result))
+        print("**********")
         for i in range(minlen):
             if result[i] != expected[i]:
                 before = max(0, i-10)
                 after = min(minlen, i+50)
-                print("**********")
-                print("Should be: {}\nIs: {}".format(expected[before:], result[before:]))
+                print("EXPECTED:\n{}\nGOT:\n{}".format(expected[before:after],                                                                    result[before:after]))
                 break
+            if i == minlen:
+                before = minlen + 1
+                print("EXPECTED:\n{}\nGOT:\n{}".format(expected[before:], result[before:]))
 
 
 def get_upstream_update(text):
     """
     Take the output of the command `apt list --upgradable and returns
     a list of upstream update
-    text: 
-        vim/zesty 2:7.5.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
-        vim-common/zesty 2:7.4.1829-1ubuntu3 amd64 [upgradable from: 2:7.4.1829-1ubuntu2]
-        mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
+    text:
         xfce4-terminal/zesty 0.8.1-1 amd64 [upgradable from: 0.6.3-2ubuntu1]
-    update:
+    result:
         'xfce4-terminal' : 0.6.3 -> 0.8.1
     """    
     upstream = []
     text = text.strip()
-    pattern = (r'(.+)/\w+ (\d+\.\d+(?:\.\d+)?).* (?:amd64|i386) \[upgradable from: '
-               r'(\d+\.\d+(?:\.\d+)?).*')
+    pattern = (r'(.+)/\w+ (?:\d+:)*(\d+\.\d+(?:\.\d+)?).* \w+ \[upgradable from: '
+               r'(?:\d+:)*(\d+\.\d+(?:\.\d+)?).*')
     pattern_version = re.compile(pattern)
 
     for line in text.splitlines():
@@ -59,11 +61,12 @@ if __name__ == '__main__':
         text = """
             mysql-common/zesty 5.8+1.0.0ubuntu1 all [upgradable from: 5.7.15-0ubuntu2]
             xfce4-terminal/zesty 0.8.1-1 amd64 [upgradable from: 0.6.3-2ubuntu1]
+            ffmpeg/zesty 7:3.2-2 amd64 [upgradable from: 7:3.1.5-1]
             """
         rst = "\n".join(get_upstream_update(text))
-        expected = """
-'mysql-common' : 5.7.15 -> 5.8
-'xfce4-terminal' : 0.6.3 -> 0.8.1"""
+        expected = """'mysql-common' : 5.7.15 -> 5.8
+'xfce4-terminal' : 0.6.3 -> 0.8.1
+'ffmpeg' : 3.1.5 -> 3.2"""
         _cmp(expected, rst)
     except:
         text = sys.stdin.read()
