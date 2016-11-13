@@ -38,7 +38,7 @@ def get_upstream_update(text):
     """    
     upstream = []
     text = text.strip()
-    pattern = (r'(.+)/\w+ (?:\d+:)*(\d+\.\d+(?:\.\d+)?).* \w+ \[upgradable from: '
+    pattern = (r'(\S+)/\S+ (?:\d+:)*(\d+\.\d+(?:\.\d+)?).* \w+ \[upgradable from: '
                r'(?:\d+:)*(\d+\.\d+(?:\.\d+)?).*')
     pattern_version = re.compile(pattern)
 
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 'xfce4-terminal' : 0.6.3 -> 0.8.1
 'ffmpeg' : 3.1.5 -> 3.2"""
         _cmp(expected, rst)
-    except:
+    except IndexError:
         text = sys.stdin.read()
         print("\n".join(get_upstream_update(text)))
 
