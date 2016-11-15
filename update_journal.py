@@ -9,6 +9,8 @@ DAYS = ('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche')
 MONTHS = ('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', \
         'Septembre', 'Octobre', 'Novembre', 'Décembre')
 
+BIRTHDAY = '21/08/1991 - 19h30'
+
 def main():
     content = get_content(JOURNAL)
     content = update_text(content)
@@ -47,7 +49,7 @@ def update_text(content):
     date_on_file = first_line.split(' - ')[0]
     
     if actual_date != date_on_file: # dates are different 
-        age = str(age_counter.counter())
+        age = str(age_counter.counter(from_date=BIRTHDAY))
         content = actual_date + ' - ' + age + '\n\n' + content
 
     return content
