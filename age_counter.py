@@ -6,30 +6,37 @@ from argparse import ArgumentParser
 # BIRTHDAY = 'dd/mm/yyyy - Hhm'
 BIRTHDAY = '21/08/1991 - 19h30'
 
-def parse_birthday():
+def parse_date(date):
     """
-        Returns birthday in struct_time object
+        Returns date in struct_time object
     """
-    birthday = dt.datetime.strptime(BIRTHDAY, '%d/%m/%Y - %Hh%M')
-    return birthday
+    try:
+        date = dt.datetime.strptime(date, '%d/%m/%Y - %Hh%M')
+    except ValueError:
+        try:
+            date = dt.datetime.strptime(date, '%d/%m/%Y')
+        except ValueError:
+            print("The format's date used is not correct")
 
-def get_diff(born):
+    return date
+
+def get_diff(from_date, to_date):
     """
         compute age and time_diff between two dates. 
         age <int> : difference in year between the two dates.
         time_diff <datetime.timedelta> : difference the last birthday and now.
     """
-    now = dt.datetime.now()
-    birthday = dt.datetime(now.year, born.month, born.day, born.hour, born.minute)
+    birthday = dt.datetime(to_date.year, from_date.month, from_date.day, 
+                            from_date.hour, from_date.minute)
     last_birthday = birthday
 
-    age = birthday.year - born.year
+    age = birthday.year - from_date.year
 
-    if (now.month, now.day) < (birthday.month, birthday.day):
+    if (to_date.month, to_date.day) < (birthday.month, birthday.day):
         age -= 1
         last_birthday = dt.datetime(now.year - 1, born.month, born.day)
 
-    time_diff = now - last_birthday
+    time_diff = to_date - last_birthday
 
     return age, time_diff
     
@@ -45,9 +52,19 @@ def compute_age(age, diff):
 
     return final_age
 
-def counter():
-    birthday = parse_birthday()
-    age, time_diff = get_diff(birthday)
+def counter(from_date, to_date):
+    """
+        Takes two dates and compute precisely the difference in 
+        years between these two dates. 
+        If from_date='1/1/2000' and to_date='1/2/2001' the output
+        will be 1.08487518 (one year + one month)
+    """
+    from_date = parse_date(from_date)
+    if not to_date:
+        to_date = dt.datetime.now() 
+    else:
+        to_date = parse_date(to_date)
+    age, time_diff = get_diff(from_date, to_date)
     precise_age = compute_age(age, time_diff)
     return precise_age
 
@@ -72,6 +89,5 @@ def _parse_args():
 
 if __name__ == '__main__':
     args = _parse_args()
-    age = counter()
+    age = counter(args.from_date, args.to_date)
     print("You have {} years old!".format(age))
-
