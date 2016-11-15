@@ -3,9 +3,6 @@
 import datetime as dt
 from argparse import ArgumentParser
 
-# BIRTHDAY = 'dd/mm/yyyy - Hhm'
-BIRTHDAY = '21/08/1991 - 19h30'
-
 def parse_date(date):
     """
         Returns date in struct_time object
@@ -52,7 +49,7 @@ def compute_age(age, diff):
 
     return final_age
 
-def counter(from_date, to_date):
+def counter(from_date='1/1/1970', to_date=None):
     """
         Takes two dates and compute precisely the difference in 
         years between these two dates. 
