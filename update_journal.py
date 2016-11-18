@@ -17,12 +17,15 @@ from datetime import date
 import datetime as dt
 import age_counter
 
+# Personal constants variables
 JOURNAL = '/home/nairwolf/Documents/misc/diary/journal.md'
+BIRTHDAY = '21/08/1991 - 19h30'
+
+# Locale variables
 DAYS = ('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche')
 MONTHS = ('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', \
         'Septembre', 'Octobre', 'Novembre', 'Décembre')
 
-BIRTHDAY = '21/08/1991 - 19h30'
 
 def main():
     content = get_content(JOURNAL)
