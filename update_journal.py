@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+"""
+    This script is used to update a personal diary with a specific syntax. 
+    This is how I'm written my own personal diary : 
+    # Vendredi 18 Novembre - 25.24374894
+    Aujourd'hui, j'ai fait telle chose importante, et j'ai pensé à cette fameuse idée.
+    C'était une bonne journée.
+
+    # Jeudi 17 Novembre - 25.23871146
+    Journée pluvieuse, comme mon esprit et mon âme....
+
+    This script automatize the writing of the first line. It writes the actual date, 
+    and display your exact age based on my personal script age_counter.py. 
+"""
 
 from datetime import date
 import datetime as dt
@@ -39,11 +52,22 @@ def convert_string_date(date):
 
 
 def get_content(filepath):
+    """
+        Open the file located at 'filepath' and stores the text in the 
+        variable 'content' and returns it.
+    """
     with open(filepath, 'r') as f:
         content = f.read()
     return content
 
 def update_text(content):
+    """
+        Take the content inside the diary file, and update the first line if 
+        needed. If the first line doesn't correspond with the actual date, 
+        this function update the variable 'content' with the actual date at 
+        the beginning. Moreover, it adds a timestamp which is your precise
+        age computed by an other script. 
+    """
     actual_date = get_actual_date()
     first_line = content.splitlines()[0]
     date_on_file = first_line.split(' - ')[0]
@@ -55,6 +79,10 @@ def update_text(content):
     return content
 
 def get_actual_date():
+    """
+        Compute the actual date and returns it 
+        with this format : '# Vendredi 18 Novembre'
+    """
     today = dt.date.today()
     weekday = DAYS[today.isoweekday() - 1]
     daynumber = today.day
@@ -63,6 +91,10 @@ def get_actual_date():
     return '# {} {} {}'.format(weekday, daynumber, month)
 
 def write_content(filepath, content):
+    """
+        Open the file located at 'filepath' and write the string 
+        variable 'content' inside.
+    """
     with open(filepath, 'w') as f:
         f.write(content)
 
