@@ -29,9 +29,9 @@ def get_diff(from_date, to_date):
 
     age = birthday.year - from_date.year
 
-    if (to_date.month, to_date.day) < (birthday.month, birthday.day):
+    if (to_date.month, to_date.day) < (from_date.month, from_date.day):
         age -= 1
-        last_birthday = dt.datetime(now.year - 1, born.month, born.day)
+        last_birthday = dt.datetime(to_date.year - 1, from_date.month, from_date.day)
 
     time_diff = to_date - last_birthday
 
