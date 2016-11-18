@@ -30,15 +30,25 @@ MONTHS = ('Janvier', 'FÃ©vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'AoÃ
 def main():
     content = get_content(JOURNAL)
     content = update_text(content)
-    content = verify_timestamp(content)
+    content = add_timestamp(content)
     write_content(JOURNAL, content)
 
-def verify_timestamp(content):
+def add_timestamp(content):
+    """
+        Update the content by adding a timestamp if the 
+        timestamp isn't already present.
+    """
+    new_lines = []
     for line in content.splitlines():
+        new_line = line
         if line and line[0] == '#':
             line_split = line.split(' - ')
             if len(line_split) == 1:
                 date = convert_string_date(line)
+                age = age_counter.counter(from_date=BIRTHDAY, to_date=date)
+                new_line = line_split[0].strip() + ' - ' + str(age)
+        new_lines.append(new_line)
+    content = '\n'.join(new_lines)
     return content
 
 def convert_string_date(date):
@@ -48,11 +58,11 @@ def convert_string_date(date):
     """
     date_list = date.split()
     day = date_list[2]
-    month = date_list[3]
+    month = MONTHS.index(date_list[3]) + 1
 
-    format_date = "{}/{}/2016 - 12h00".format(day, month)
-    return format_date
+    formated_date = "{}/{}/2016".format(day, month)
 
+    return formated_date
 
 def get_content(filepath):
     """
