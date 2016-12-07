@@ -42,11 +42,10 @@ def add_timestamp(content):
     for line in content.splitlines():
         new_line = line
         if line and line[0] == '#':
-            line_split = line.split(' - ')
-            if len(line_split) == 1:
-                date = convert_string_date(line)
-                age = age_counter.counter(from_date=BIRTHDAY, to_date=date)
-                new_line = line_split[0].strip() + ' - ' + str(age)
+            str_date = line.split(' - ')[0]
+            date = convert_string_date(str_date)
+            age = age_counter.counter(from_date=BIRTHDAY, to_date=date)
+            new_line = str_date + ' - ' + str(age)
         new_lines.append(new_line)
     content = '\n'.join(new_lines)
     return content
@@ -82,11 +81,12 @@ def update_text(content):
         age computed by an other script. 
     """
     actual_date = get_actual_date()
+    to_date = convert_string_date(actual_date) + " - 12h00"
     first_line = content.splitlines()[0]
     date_on_file = first_line.split(' - ')[0]
     
     if actual_date != date_on_file: # dates are different 
-        age = str(age_counter.counter(from_date=BIRTHDAY))
+        age = str(age_counter.counter(from_date=BIRTHDAY, to_date=to_date))
         content = actual_date + ' - ' + age + '\n\n' + content
 
     return content
