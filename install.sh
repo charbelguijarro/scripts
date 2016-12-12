@@ -11,6 +11,7 @@ sudo cp update-todolist.py ${target}update-todolist
 sudo cp update_journal.py ${target}update_journal
 sudo cp get_upstream_update.py ${target}get_upstream_update
 sudo cp age_counter.py ${target}age_counter.py
+sudo cp vim_format.py ${target}vim_format
 
 sudo chmod 755 ${target}*
 
