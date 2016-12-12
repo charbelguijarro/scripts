@@ -3,7 +3,7 @@
 import sys
 import textwrap
 
-WIDTH_MAX = 85
+WIDTH_MAX = 80
 
 def add_carriage_return(content):
     lines = []
