@@ -3,7 +3,25 @@
 import datetime as dt
 from argparse import ArgumentParser
 
-def parse_date(date):
+def counter(from_date='1/1/1970', to_date=None):
+    """
+        Takes two dates and compute precisely the difference in 
+        years between these two dates. 
+        If from_date='1/1/2000' and to_date='1/2/2001' the output
+        will be 1.08487518 (one year + one month)
+    """
+    from_date = _parse_date(from_date)
+
+    if not to_date:
+        to_date = dt.datetime.now() 
+    else:
+        to_date = _parse_date(to_date)
+
+    age, time_diff = _get_time_diff(from_date, to_date)
+    precise_age = _compute_age(age, time_diff)
+    return precise_age
+
+def _parse_date(date):
     """
         Returns date in struct_time object
     """
@@ -17,11 +35,15 @@ def parse_date(date):
 
     return date
 
-def get_diff(from_date, to_date):
+def _get_time_diff(from_date, to_date):
     """
-        compute age and time_diff between two dates. 
-        age <int> : difference in year between the two dates.
+        Returns age and time_diff between two dates. 
+        age <int> : difference in years between the two dates.
         time_diff <datetime.timedelta> : difference the last birthday and now.
+
+        Input:
+        from_date <datetime.datetime> : Start date
+        to_date <datetime.datetime> : End date
     """
     birthday = dt.datetime(to_date.year, from_date.month, from_date.day, 
                             from_date.hour, from_date.minute)
@@ -37,33 +59,25 @@ def get_diff(from_date, to_date):
 
     return age, time_diff
     
-def compute_age(age, diff):
-    one_year = 365.24219879 
-    one_day = 24 * 60 * 60
-    one_year_secs = one_day * one_year
+def _compute_age(age, diff):
+    """
+        Returns a precise age by converting 'diff' in year and by adding that to 
+        the 'age' variable. 
+
+        age <int> : Age of the user
+        diff <datetime.timedelta> : Time between the last birthday and the end date
+    """
+    one_year = 365.24219879 # in days
+    one_day = 24 * 60 * 60 # in seconds
+    one_year_in_secs = one_day * one_year
 
     diff_secs = diff.total_seconds()
-    age_deci = diff_secs / one_year_secs
+    age_deci = diff_secs / one_year_in_secs
 
     final_age = round(age + age_deci, 8)
 
     return final_age
 
-def counter(from_date='1/1/1970', to_date=None):
-    """
-        Takes two dates and compute precisely the difference in 
-        years between these two dates. 
-        If from_date='1/1/2000' and to_date='1/2/2001' the output
-        will be 1.08487518 (one year + one month)
-    """
-    from_date = parse_date(from_date)
-    if not to_date:
-        to_date = dt.datetime.now() 
-    else:
-        to_date = parse_date(to_date)
-    age, time_diff = get_diff(from_date, to_date)
-    precise_age = compute_age(age, time_diff)
-    return precise_age
 
 def _parse_args():
     parser = ArgumentParser(description='Compute precisely time between \
