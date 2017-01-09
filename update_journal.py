@@ -58,8 +58,9 @@ def convert_string_date(date):
     date_list = date.split()
     day = date_list[2]
     month = MONTHS.index(date_list[3]) + 1
+    year = dt.date.today().year
 
-    formated_date = "{}/{}/2016".format(day, month)
+    formated_date = "{}/{}/{}".format(day, month, year)
 
     return formated_date
 
